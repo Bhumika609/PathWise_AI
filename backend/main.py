@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from mangum import Mangum
+from services.profile_service import extract_profile
+from services.eligibility_service import check_eligibility
 
 app = FastAPI(title="PathWise AI Backend")
 
@@ -28,10 +30,12 @@ def health():
 
 @app.post("/analyze")
 def analyze(request: AnalyzeRequest):
-    return {
-        "message": "Analyze endpoint working",
-        "input_text": request.text
-    }
+    profile = extract_profile(request.text)
+    eligibility = check_eligibility(profile)
 
+    return {
+        "profile": profile,
+        "eligibility": eligibility
+    }
 # Lambda handler
 handler = Mangum(app)
