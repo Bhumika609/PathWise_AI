@@ -1,0 +1,6 @@
+venv/
+_pycache_/
+*.pyc
+gunicorn.ctl
+bedrock_test*.py
+comprehend_test.py
